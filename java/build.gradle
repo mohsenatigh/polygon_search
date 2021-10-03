@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = 'geospat.Geospat'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'geospat.Geospat'
+        )
+    }
+    baseName 'geospat'
+}
+
+dependencies {
+ 
+}

@@ -1,0 +1,18 @@
+cmake_minimum_required (VERSION 2.6)
+#set(CMAKE_BUILD_TYPE Debug)
+
+#set(CMAKE_C_COMPILER "clang")
+#set(CMAKE_CXX_COMPILER "clang++")
+
+set(CMAKE_BUILD_TYPE Release)
+set(NAME cppgeo.bin)
+project (${NAME})
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "-Wall ")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+AUX_SOURCE_DIRECTORY(. CTR_SOURCES)
+AUX_SOURCE_DIRECTORY(./utils CTR_SOURCES)
+SET_SOURCE_FILES_PROPERTIES( ${CTR_SOURCES} PROPERTIES LANGUAGE CXX )
+add_executable(${NAME} ${CTR_SOURCES})
+target_link_libraries(${NAME})
