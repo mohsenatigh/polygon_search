@@ -38,5 +38,7 @@ java/build/
 java/.vscode/
 java/.gradle/
 java/.settings/
+java/.classpath/
+java/.project/
 go/gogeo
 
