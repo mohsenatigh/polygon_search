@@ -15,7 +15,7 @@ This program uses an equal space portioning technique for solving the problem of
 
 ## Build
 ### C++
-    cd cpp
+    cd cppgeo
     mkdir __buid
     cmake ..
     make -j 
