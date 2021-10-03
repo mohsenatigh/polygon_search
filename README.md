@@ -53,6 +53,16 @@ the following table is the lookup results
 
 ### CASE 2
 
-The second case considers the "Freiburger Münster." it is a location with an average complexity.
+The second case considers the "Freiburger Münster." it is a location with an average complexity.The following image visualizes the search results in the three levels of accuracy
 
+!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/2.gif)
 
+the following table is the lookup results
+
+| Language | High Accuracy  | Medium Accuracy | Medium Accuracy |
+| ------------ | ------------ | ------------ | ------------ |
+| C++  |  62 μs | 20 μs | 17 μs |
+|  JAVA |  111 μs |  102 μs |  95 μs |
+|  GO | 127 μs | 79 μs | 70 μs |
+
+!["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/2_chart.png)
