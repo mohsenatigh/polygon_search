@@ -43,7 +43,7 @@ The first scenario considers a location in the middle of a very sparse area. the
 
 the following table is the lookup results
 
-| Language | High Accuracy  | Medium Accuracy | Medium Accuracy |
+| Language | High Accuracy  | Medium Accuracy | Low Accuracy |
 | ------------ | ------------ | ------------ | ------------ |
 | C++  |  17 μs | 17 μs | 17 μs |
 |  JAVA |  95 μs |  95 μs |  95 μs |
@@ -59,10 +59,26 @@ The second case considers the "Freiburger Münster." it is a location with an av
 
 the following table is the lookup results
 
-| Language | High Accuracy  | Medium Accuracy | Medium Accuracy |
+| Language | High Accuracy  | Medium Accuracy | Low Accuracy |
 | ------------ | ------------ | ------------ | ------------ |
 | C++  |  62 μs | 20 μs | 17 μs |
 |  JAVA |  111 μs |  102 μs |  95 μs |
 |  GO | 127 μs | 79 μs | 70 μs |
 
 !["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/2_chart.png)
+
+## Case 3
+
+Case 3 is the lookup of a location in the densest area of the map (center of Nuremberg)
+
+!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/3.gif)
+
+the following table is the lookup results
+
+| Language | High Accuracy  | Medium Accuracy | Low Accuracy |
+| ------------ | ------------ | ------------ | ------------ |
+| C++  |  76 μs | 45 μs | 17 μs |
+|  JAVA |  113 μs |  105 μs |  95 μs |
+|  GO | 200 μs | 163 μs | 70 μs |
+
+!["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/3_chart.png)
