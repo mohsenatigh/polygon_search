@@ -11,7 +11,7 @@ This program uses an equal space portioning technique for solving the problem of
 -   The memory usage will be reduced (by the magnitude of 10 or 15 times ) if we disable the high accuracy mode.
 -   The complexity is O(1) for 46% of the regions and O(M) for others  (The maximum M for the current sample data is 13). 
 -   I considered the Java JIT  functionality by adding a warmup phase before starting the actual test
--   The medium accuracy version is usually enough for most of the usage,
+-   The medium accuracy version is usually enough for most of the usage scenarios
 
 ## Build
 ### C++
