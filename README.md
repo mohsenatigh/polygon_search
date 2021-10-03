@@ -13,7 +13,7 @@ This program uses an equal space portioning technique for solving the problem of
 -   I considered the Java JIT  functionality by adding a warmup phase before starting the actual test
 -   The medium accuracy version is usually enough for most of the usage,
 
-##Build
+## Build
 ### C++
     cd cpp
     mkdir __buid
@@ -82,3 +82,19 @@ the following table is the lookup results
 |  GO | 200 μs | 163 μs | 70 μs |
 
 !["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/3_chart.png)
+
+## Case 4
+
+Case 4 is considered a very tricky point in the junction of 3 big polygons. it tests the performance of the ray tracing algorithm in the high accuracy mode 
+
+!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/4.gif)
+
+the following table is the lookup results
+
+| Language | High Accuracy  | Medium Accuracy | Low Accuracy |
+| ------------ | ------------ | ------------ | ------------ |
+| C++  |  110 μs | 20 μs | 17 μs |
+|  JAVA |  130 μs |  102 μs |  95 μs |
+|  GO | 280 μs | 78 μs | 70 μs |
+
+!["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/4_chart.png)
