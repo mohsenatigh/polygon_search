@@ -9,6 +9,7 @@
 #include <string>
 #include <thread>
 #include <unistd.h>
+#include <random>
 
 using Matrix = GeoMatrix<double, uint64_t, 1000>;
 //---------------------------------------------------------------------------------------
@@ -77,16 +78,18 @@ int main(int argc, char *argv[]) {
                            "-o long\n"
                            "-H search with high accuracy\n"
                            "-L search with low accuracy\n"
+                           "-R use random points\n"
                            "-h show help\n";
 
   std::string dataFile = "data.csv";
   double lat = 7.847786843776704;
   double lng = 47.99549694289439;
-  uint32_t cCount = 1000;
+  uint32_t cCount = 10000000;
+  bool useRandomPoints=false;
   Matrix::GeoMatrixAccuracy acc=Matrix::MEDIUM;
   std::vector<uint64_t> out;
 
-  while ((c = getopt(argc, argv, "c:f:a:o:hHL")) != -1) {
+  while ((c = getopt(argc, argv, "c:f:a:o:hHLR")) != -1) {
     switch (c) {
     case 'f':
       dataFile = std::string(optarg);
@@ -105,6 +108,9 @@ int main(int argc, char *argv[]) {
       break;
     case 'L':
       acc=Matrix::LOW;
+      break;
+    case 'R':
+      useRandomPoints=true;
       break;
     case 'h':
       std::cout << help << "\n";
@@ -130,15 +136,34 @@ int main(int argc, char *argv[]) {
 
   out = rMat.query(queryPoint,acc,-1);
   for (auto &i : out) {
-    std::cout << "Find Polygon with ID : " << i << std::endl;
+    std::cout << "Postal code : " << i << std::endl;
   }
 
+  //random generator function 
+  std::vector<Point<double>> testPoints;
+  auto randomFlot=[](){
+    static std::default_random_engine e;
+    static std::uniform_real_distribution<> dis(0, 1); // rage 0 - 1
+    return dis(e);
+  };
+
+  for(uint32_t i=0;i<cCount;i++){
+    double x=randomFlot()/1000;
+    double y=randomFlot()/1000;
+    testPoints.emplace_back(Point<double>(queryPoint.getX()+x,queryPoint.getY()+y));
+  }
+
+  //control optimizer
   uint64_t count = 0;
   RunFunc(
       [&]() {
         for (uint32_t i = 0; i < cCount; i++) {
           out.clear();
-          rMat.query(queryPoint, out,acc,1);
+          if(useRandomPoints){
+            rMat.query(testPoints[i], out,acc,1);
+          } else {
+            rMat.query(queryPoint, out,acc,1);
+          }
           count += out.size();
         }
       },

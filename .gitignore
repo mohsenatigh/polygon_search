@@ -40,5 +40,7 @@ java/.gradle/
 java/.settings/
 java/.classpath/
 java/.project/
+java/bin/
 go/gogeo
-
+convertgeojson/convertgeojson
+rust/polygon_search/target/

@@ -4,12 +4,13 @@ import java.io.FileInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Random;
 
 import geospat.GeoMatrix.GeoMatrixAccuracy;
 
 public final class Geospat {
 
-  static private GeoMatrix<Integer> matrix_=new GeoMatrix<Integer>();
+  static private GeoMatrix<Float> matrix_=new GeoMatrix<Float>();
   
   //-------------------------------------------------------------------------------------
   static private Point readPoint(String in) throws Exception {
@@ -36,7 +37,7 @@ public final class Geospat {
         for(int i=1;i<parts.length;i++){
             points.add(readPoint(parts[i]));
         }
-        matrix_.add(new Polygon(points), Integer.parseInt(id));
+        matrix_.add(new Polygon(points), Float.parseFloat(id));
       }
       str.close();
     } catch(Exception e){
@@ -45,30 +46,48 @@ public final class Geospat {
     return true;
   }
   //-------------------------------------------------------------------------------------
-  private static void testPerformance(final Point testPoint,GeoMatrixAccuracy acc){
-    ArrayList<Integer> out=new ArrayList<Integer>();
+  private static void testPerformance(final Point testPoint,GeoMatrixAccuracy acc,boolean useRandomPoints){
+    ArrayList<Float> out=new ArrayList<Float>();
+    final int COUNT=10000000;
+
+    ArrayList<Point> points=new ArrayList<Point>();
+    
+    Random r = new Random();
+    for(int i=0;i<COUNT;i++){
+      Double x=r.nextDouble()/10000;
+      Double y=r.nextDouble()/10000;
+      points.add(new Point(testPoint.getX()+x,testPoint.getY()+y));
+    }
+
+
     long start = System.nanoTime();
-    for (int i = 0; i < 1000; i++) {
-      matrix_.query(testPoint,out,acc,1);
+    for (int i = 0; i < COUNT; i++) {
+      if(useRandomPoints){
+        matrix_.query(points.get(i),out,acc,1);
+      } else {
+        matrix_.query(testPoint,out,acc,1);
+      }
+      out.clear();
     }
     long end = System.nanoTime();
-    System.out.printf("t = %d \n",(end-start)/1000);
+    System.out.printf("t = %d Micro second\n",(end-start)/1000);
   }
   //-------------------------------------------------------------------------------------
   public static void main(String[] args){
     
-    final String help = """
-    -f data file
-    -a lat
-    -o long
-    -H search with high accuracy
-    -L search with low accuracy
-    -h show help
-    """;
+    final String help = 
+    "-f data file\n"+
+    "-a lat\n"+
+    "-o long\n"+
+    "-H search with high accuracy\n"+
+    "-L search with low accuracy\n"+
+    "-R use random points\n"+
+    "-h show help\n";
 
     String dataFile="../data.csv";
     Double lat=7.847786843776704;
     Double lng=47.99549694289439;
+    Boolean useRandomPoints=false;
     GeoMatrixAccuracy acc=GeoMatrixAccuracy.MEDIUM;
 
     //parse command lines
@@ -96,6 +115,9 @@ public final class Geospat {
           case "-H":
             acc=GeoMatrixAccuracy.HIGH;
             break;
+          case "-R":
+            useRandomPoints=true;
+            break;
         }
       }
     } catch(Exception e){
@@ -114,19 +136,12 @@ public final class Geospat {
     matrix_.build();
 
     Point testPoint=new Point(lat,lng);
-    ArrayList<Integer> out = matrix_.query(testPoint,acc,-1);
-    for (Integer i : out) {
+    ArrayList<Float> out = matrix_.query(testPoint,acc,-1);
+    for (Float i : out) {
       System.out.println(i);
     }
 
-
-    //JIT Warmup
-    System.out.println("Warmup jit compiler");
-    for(int i=0;i<8;i++){
-      testPerformance(testPoint,acc);
-    }
-    
     System.out.println("Final test");
-    testPerformance(testPoint,acc);
+    testPerformance(testPoint,acc,useRandomPoints);
   }
 }

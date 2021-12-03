@@ -13,7 +13,7 @@ const ROW = 1000
 //---------------------------------------------------------------------------------------
 type GeoMatrixData struct {
 	polygon Polygon
-	data    interface{}
+	data    float64
 }
 
 //---------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ func (thisPt *GeoMatrix) CoverArea(start MatrixPoint, end MatrixPoint, itemInfo 
 }
 
 //---------------------------------------------------------------------------------------
-func (thisPt *GeoMatrix) Add(poly Polygon, data interface{}) {
+func (thisPt *GeoMatrix) Add(poly Polygon, data float64) {
 	rect := poly.GetBoundingBox()
 
 	if len(thisPt.items) == 0 {
@@ -139,10 +139,10 @@ func (thisPt *GeoMatrix) Build() {
 
 //---------------------------------------------------------------------------------------
 
-func (thisPt *GeoMatrix) Query(point *Point, acc int, maxCount int) []interface{} {
+func (thisPt *GeoMatrix) Query(point *Point, acc int, maxCount int) []float64 {
 	mPoint := thisPt.GetMatrixPoint(point)
 	items := thisPt.pMap[mPoint]
-	out := []interface{}{}
+	out := []float64{}
 
 	if items == nil {
 		return nil
@@ -159,17 +159,25 @@ func (thisPt *GeoMatrix) Query(point *Point, acc int, maxCount int) []interface{
 			return out
 		}
 
-		if acc == GeoMatrixAccuracyHigh {
-			if items[i].polygon.PointIsInside(point) {
-				out = append(out, items[i].data)
-				return out
+		switch acc {
+		case GeoMatrixAccuracyHigh:
+			{
+				if items[i].polygon.PointIsInside(point) {
+					out = append(out, items[i].data)
+					return out
+				}
 			}
-		} else if acc == GeoMatrixAccuracyMedium {
-			if items[i].polygon.GetBoundingBox().PointInside(point) {
+		case GeoMatrixAccuracyMedium:
+			{
+				if items[i].polygon.GetBoundingBox().PointInside(point) {
+					out = append(out, items[i].data)
+				}
+			}
+		default:
+			{
 				out = append(out, items[i].data)
 			}
-		} else {
-			out = append(out, items[i].data)
+
 		}
 	}
 	return out

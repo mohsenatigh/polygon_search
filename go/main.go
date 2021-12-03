@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
@@ -58,7 +59,14 @@ func readFile(name string, geoMatrix *GeoMatrix) {
 		pol := Polygon{}
 		pol.SetPoints(points)
 
-		geoMatrix.Add(pol, parts[0])
+		//convert id to number
+		id, err := strconv.ParseFloat(parts[0], 64)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		//
+		geoMatrix.Add(pol, id)
 	}
 
 }
@@ -74,8 +82,9 @@ func main() {
 	lng := flag.Float64("o", 47.99549694289439, "long")
 	H := flag.Bool("H", false, "search with high accuracy")
 	L := flag.Bool("L", false, "search with low accuracy")
-	c := flag.Int("c", 1000, "loop count")
+	c := flag.Int("c", 10000000, "loop count")
 	d := flag.Bool("d", false, "dump stat")
+	useRandom := flag.Bool("R", false, "use random points")
 
 	flag.Parse()
 
@@ -100,13 +109,24 @@ func main() {
 
 	out := matrix.Query(&point, acc, -1)
 	for i := range out {
-		fmt.Println(out[i].(string))
+		fmt.Println(out[i])
+	}
+
+	points := []Point{}
+	for i := 0; i < *c; i++ {
+		x := rand.Float64() / 10000
+		y := rand.Float64() / 10000
+		nPoint := Point{point.x + x, point.y + y}
+		points = append(points, nPoint)
 	}
 
 	start := time.Now()
-
 	for i := 0; i < *c; i++ {
-		matrix.Query(&point, acc, 1)
+		if *useRandom {
+			matrix.Query(&points[i], acc, 1)
+		} else {
+			matrix.Query(&point, acc, 1)
+		}
 	}
 	log.Printf("%v search takes %d microsec \n", *c, time.Since(start)/1000)
 

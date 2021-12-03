@@ -1,24 +1,39 @@
 # Polygon Search
-This program uses an equal space portioning technique for solving the problem of locating polygons in a huge polygon list. As it is a relatively simple algorithm, it was a suitable candidate to compare and benchmark the functionality of different programming languages.  There are some points regarding this benchmark:
+This simple program uses Geospatial Partitioning to find the postal code of a specific geographical point in Germany.  I use this program to compare the performance of four popular programming languages. There are some points regarding this benchmark:
 
 - 	I didn't use any third-party library for this benchmark, and all the implementations remain based on standard data structures and libraries available in each programming language. 
 -   The benchmark result is based on sample data containing 86000 polygons that cover all the german regions.
 -   To keep the system as simple as possible, I am using a custom file format for importing the polygons data. 
 -   the algorithm contains three operation modes:
-	-	**HIGH**: which returns the exact polygon containing the query point
-	-	**MEDIUM**:  which returns the polygon(s) with relatively high accuracy with few hundred-meter fault, which is mainly based on the region and data
-	-	**LOW**:   for the German region, the fault rate is about 1.5 to 2 kilometers
+	-	**HIGH**
+	-	**MEDIUM**
+	-	**LOW**  
 -   The memory usage will be reduced (by the magnitude of 10 or 15 times ) if we disable the high accuracy mode.
 -   The complexity is O(1) for 46% of the regions and O(M) for others  (The maximum M for the current sample data is 13). 
--   I considered the Java JIT  functionality by adding a warmup phase before starting the actual test
--   The medium accuracy version is usually enough for most of the usage scenarios
+
+## Compiler version
+-   The results are related to the following compiler versions : 
+    -   **gcc version 9.3.0**
+    -   **clang version 10.0.0**
+    -   **jdk-17 for java**
+    -   **go version go1.17.1**
+    -   **rustc 1.55.0**
+
+## Test Data
+    
 
 ## Build
-### C++
+### C++ gcc
     cd cppgeo
     mkdir __buid
     cmake ..
-    make -j 
+    make -j
+### C++ clang
+    uncomment set(CMAKE_C_COMPILER "clang") set(CMAKE_CXX_COMPILER "clang++") in the CMakeLists.txt file
+    cd cppgeo
+    mkdir __buid
+    cmake ..
+    make -j
 
 ### JAVA 
 	cd java
@@ -30,71 +45,63 @@ This program uses an equal space portioning technique for solving the problem of
 	cd go
     go build
 
+### RUST
+    cd rust/polygon_search
+    cargo build --release
+
 ## Usage 
 For viewing the available options for each version, use -h switch
 
 ## Test Scenario
-The test scenario contains four different test cases that cover most of the aspects of the algorithms. The results are based on 1000 times lookup of the specified point and are in Microsecond.
+The results are based on 1000000 times lookup of the specified point and random and are in Microsecond.
 
 ### CASE 1
-The first scenario considers a location in the middle of a very sparse area. the complexity of the search is O(1) for all the three search mode
+The first Scenario considers the location of the Freiburg central church.
+
+**Freiburger Münster Lookup results**
+
+| Language | High Accuracy  | Medium Accuracy | Low Accuracy |
+| ------------ | ------------ | ------------ | ------------ |
+| C++ (gcc)  |  1394029 μs | 354843 μs | 271316 μs |
+| C++ (clang) |  1654293 μs | 384636 μs | 320392 μs |
+|  JAVA |  1969147 μs |  595850 μs |  514363 μs |
+|  GO | 2130709 μs | 719377 μs | 652770 μs |
+|  RUST | 2200332 μs | 504338 μs | 433640 μs |
 
 !["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/1.png)
 
-the following table is the lookup results
+**Random points around Freiburger Münster**
 
 | Language | High Accuracy  | Medium Accuracy | Low Accuracy |
 | ------------ | ------------ | ------------ | ------------ |
-| C++  |  17 μs | 17 μs | 17 μs |
-|  JAVA |  95 μs |  95 μs |  95 μs |
-|  GO | 70 μs | 70 μs | 70 μs |
+| C++ (gcc)  |  1501170 μs | 355831 μs | 273120 μs |
+| C++ (clang) |  1724351 μs | 387201 μs | 323969 μs |
+|  JAVA |  2377246 μs |  630499 μs |  539974 μs |
+|  GO | 2216277 μs | 725739 μs | 668134 μs |
+|  RUST | 2283935 μs | 508129 μs | 443500 μs |
 
-!["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/1_chart.png)
+!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/2.png)
 
-### CASE 2
-
-The second case considers the "Freiburger Münster." it is a location with an average complexity.The following image visualizes the search results in the three levels of accuracy
-
-!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/2.gif)
-
-the following table is the lookup results
+**A location in a big polygon**
 
 | Language | High Accuracy  | Medium Accuracy | Low Accuracy |
 | ------------ | ------------ | ------------ | ------------ |
-| C++  |  62 μs | 20 μs | 17 μs |
-|  JAVA |  111 μs |  102 μs |  95 μs |
-|  GO | 127 μs | 79 μs | 70 μs |
+| C++ (gcc)  |  5187784 μs | 378546 μs | 321742 μs |
+| C++ (clang) |  5187583 μs | 380561 μs | 335955 μs |
+|  JAVA |  7507826 μs |  566826 μs |  504545 μs |
+|  GO | 6492508 μs | 708009 μs | 643355 μs |
+|  RUST | 9399210 μs | 508060 μs | 430104 μs |
 
-!["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/2_chart.png)
+!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/3.png)
 
-## Case 3
-
-Case 3 is the lookup of a location in the densest area of the map (center of Nuremberg)
-
-!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/3.gif)
-
-the following table is the lookup results
+**A location in a big polygon ( Random Points )**
 
 | Language | High Accuracy  | Medium Accuracy | Low Accuracy |
 | ------------ | ------------ | ------------ | ------------ |
-| C++  |  76 μs | 45 μs | 17 μs |
-|  JAVA |  113 μs |  105 μs |  95 μs |
-|  GO | 200 μs | 163 μs | 70 μs |
+| C++ (gcc)  |  5246180 μs | 386938 μs | 326808 μs |
+| C++ (clang) |  5261288 μs | 388207 μs | 336071 μs |
+|  JAVA |  7867935 μs |  604901 μs |  574479 μs |
+|  GO | 6531627 μs | 712063 μs | 650678 μs |
+|  RUST | 9396629 μs | 506499 μs | 444764 μs |
 
-!["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/3_chart.png)
-
-## Case 4
-
-Case 4 is considered a very tricky point in the junction of 3 big polygons. it tests the performance of the ray tracing algorithm in the high accuracy mode 
-
-!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/4.gif)
-
-the following table is the lookup results
-
-| Language | High Accuracy  | Medium Accuracy | Low Accuracy |
-| ------------ | ------------ | ------------ | ------------ |
-| C++  |  110 μs | 20 μs | 17 μs |
-|  JAVA |  130 μs |  102 μs |  95 μs |
-|  GO | 280 μs | 78 μs | 70 μs |
-
-!["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/4_chart.png)
+!["lookup location"](https://github.com/mohsenatigh/polygon_search/blob/main/images/4.png)
