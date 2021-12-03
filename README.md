@@ -56,7 +56,7 @@ The results are based on 1000000 times lookup of the specified point and are in 
 ### CASE 1
 The first Scenario considers the location of the Freiburg central church.
 
-**Freiburger Münster Lookup results**
+**Freiburger Münster Lookup results (High and low accuracy)**
 
 !["High accuracy lookup result"](https://github.com/mohsenatigh/polygon_search/blob/main/images/f1.png)
 !["Low accuracy lookup result"](https://github.com/mohsenatigh/polygon_search/blob/main/images/f2.png)
@@ -83,9 +83,9 @@ The first Scenario considers the location of the Freiburg central church.
 
 !["lookup results"](https://github.com/mohsenatigh/polygon_search/blob/main/images/2.png)
 
-**A location in a big polygon**
-!["High accuracy lookup result"](https://github.com/mohsenatigh/polygon_search/blob/main/images/p1.png)
-!["Low accuracy lookup result"](https://github.com/mohsenatigh/polygon_search/blob/main/images/p2.png)
+**A location in a big polygon (High and low accuracy)**
+!["High accuracy lookup result"](https://github.com/mohsenatigh/polygon_search/blob/main/images/p2.png)
+!["Low accuracy lookup result"](https://github.com/mohsenatigh/polygon_search/blob/main/images/p1.png)
 
 | Language | High Accuracy  | Medium Accuracy | Low Accuracy |
 | ------------ | ------------ | ------------ | ------------ |
