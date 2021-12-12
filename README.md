@@ -3,7 +3,7 @@ This simple program uses Geospatial Partitioning to find the postal code of a sp
 
 - 	I didn't use any third-party library for this benchmark, and all the implementations remain based on standard data structures and libraries available in each programming language. 
 -   The benchmark result is based on sample data containing polygons that cover all the german region.
--   To keep the system as simple as possible, I am using a custom file format for importing the polygons data. you can download the original data from https://www.suche-postleitzahl.org/plz-karte-erstellen  
+-   To keep the system as simple as possible, I am using a custom file format for importing the polygons data. you can download the original data from https://www.suche-postleitzahl.org/plz-karte-erstellen as a Geojson file  
 -   the algorithm contains three operation modes:
 	-	**HIGH**
 	-	**MEDIUM**
@@ -16,9 +16,6 @@ This simple program uses Geospatial Partitioning to find the postal code of a sp
     -   **jdk-17**
     -   **go version 1.17.1**
     -   **rustc 1.55.0**
-
-## Test Data
-
 
 ## Build
 ### C++ gcc
@@ -51,7 +48,7 @@ This simple program uses Geospatial Partitioning to find the postal code of a sp
 For viewing the available options for each version, use -h switch
 
 ## Test Scenario
-The results are based on 1000000 times lookup of the specified point and are in Microsecond.
+The results are based on 1000000 times lookup of the specified point and are in Microsecond. To consider the effect of the java jit loop predicate, I executed the tests in two modes, In the first mode I searched a constant point and in the second mode I added some random noises to it
 
 ### CASE 1
 The first Scenario considers the location of the Freiburg central church.
